@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Selenium Test Lab | Selenium WebDriver Features That Make Automation Testing Easier</title>
+<meta name="description" content="An interactive landing page on Selenium WebDriver features that make automation testing easier. Run a live test, tame waits, pick locators and follow a QA roadmap.">
+<meta name="theme-color" content="#43B02A">
+<meta property="og:title" content="Selenium Test Lab">
+<meta property="og:description" content="Play with a live test run, a wait strategy lab and a locator picker. Learn Selenium WebDriver features the fun way.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2343B02A'/%3E%3Ctext x='32' y='42' font-size='28' font-family='Arial' font-weight='700' text-anchor='middle' fill='white'%3ESe%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#43B02A;
+  --green-deep:#1F6B1A;
+  --green-dark:#12400F;
+  --lime:#9BE15D;
+  --mint:#E7F7DD;
+  --paper:#F5FBF1;
+  --ink:#0F2012;
+  --muted:#4D6551;
+  --card:#FFFFFF;
+  --term:#0E1A11;
+  --red:#E5484D;
+  --amber:#F5A524;
+  --radius:22px;
+  --shadow:0 18px 40px rgba(31,107,26,.14);
+  --head:"Space Grotesk","Segoe UI",system-ui,sans-serif;
+  --body:"Inter","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.6;overflow-x:hidden}
+img,svg{max-width:100%}
+a{color:inherit}
+.wrap{width:min(1180px,92%);margin-inline:auto}
+h1,h2,h3{font-family:var(--head);line-height:1.12;letter-spacing:-.02em}
+.sr{position:absolute;left:-9999px}
+
+/* background dots */
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:
+  radial-gradient(circle at 12% 8%,rgba(155,225,93,.35),transparent 38%),
+  radial-gradient(circle at 92% 30%,rgba(67,176,42,.18),transparent 40%),
+  radial-gradient(rgba(31,107,26,.10) 1.2px,transparent 1.2px) 0 0/26px 26px,var(--paper)}
+
+/* header */
+header.top{position:sticky;top:0;z-index:50;background:rgba(245,251,241,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(31,107,26,.14)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:72px;gap:16px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-family:var(--head);font-weight:700;font-size:1.15rem}
+.logo{width:42px;height:42px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:#fff;font-weight:700;font-size:1rem;box-shadow:0 0 0 4px var(--mint),0 6px 14px rgba(67,176,42,.45);transition:transform .5s}
+.brand:hover .logo{transform:rotate(360deg)}
+.menu{display:flex;gap:6px;list-style:none;align-items:center}
+.menu a{display:block;padding:9px 14px;border-radius:999px;text-decoration:none;font-weight:600;font-size:.94rem;color:var(--muted);transition:.2s}
+.menu a:hover{background:var(--mint);color:var(--green-deep)}
+.menu .cta{background:var(--green);color:#fff}
+.menu .cta:hover{background:var(--green-deep);color:#fff}
+.burger{display:none;background:var(--green);color:#fff;border:0;width:44px;height:44px;border-radius:12px;font-size:1.3rem;cursor:pointer}
+
+/* hero */
+.hero{padding:70px 0 40px;display:grid;grid-template-columns:1.05fr .95fr;gap:42px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:8px;background:var(--mint);color:var(--green-deep);padding:7px 14px;border-radius:999px;font-weight:600;font-size:.86rem;border:1px solid rgba(67,176,42,.4)}
+.chip i{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(67,176,42,.7)}100%{box-shadow:0 0 0 12px rgba(67,176,42,0)}}
+.hero h1{font-size:clamp(2.3rem,5.2vw,4rem);margin:18px 0 18px}
+.hero h1 em{font-style:normal;background:linear-gradient(120deg,var(--green) 0%,var(--lime) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:1.12rem;color:var(--muted);max-width:56ch}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 22px;border-radius:14px;font-weight:700;text-decoration:none;border:2px solid var(--ink);cursor:pointer;font-family:var(--body);font-size:1rem;transition:transform .15s,box-shadow .15s;background:#fff;color:var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn.primary{background:var(--green);color:#fff}
+.stats{display:flex;gap:26px;margin-top:30px;flex-wrap:wrap}
+.stats b{display:block;font-family:var(--head);font-size:1.7rem;color:var(--green-deep)}
+.stats span{font-size:.85rem;color:var(--muted)}
+
+/* terminal */
+.term{background:var(--term);color:#D7F5C8;border-radius:var(--radius);box-shadow:var(--shadow),0 0 0 1px rgba(155,225,93,.25);overflow:hidden;position:relative}
+.term-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;background:#16281B;border-bottom:1px solid rgba(155,225,93,.2)}
+.dot{width:12px;height:12px;border-radius:50%}
+.dot.r{background:#ff5f56}.dot.y{background:#ffbd2e}.dot.g{background:#27c93f}
+.term-bar span{margin-left:8px;font-family:var(--mono);font-size:.8rem;opacity:.75}
+.term-body{padding:18px 18px 8px;font-family:var(--mono);font-size:.86rem;min-height:318px}
+.line{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dashed rgba(155,225,93,.12);animation:slide .3s ease}
+@keyframes slide{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+.line .ok{color:var(--lime);font-weight:600}
+.line .bad{color:#FF8A8D;font-weight:600}
+.line .run{color:#F5D56B}
+.hint{margin:10px 0;padding:10px 12px;border-radius:10px;background:rgba(245,165,36,.12);border:1px solid rgba(245,165,36,.5);color:#FFE2A8;font-size:.8rem}
+.sum{padding:8px 0 4px;color:var(--lime);font-weight:600}
+.term-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;background:#16281B}
+.term-foot button{background:var(--green);color:#fff;border:0;padding:10px 16px;border-radius:10px;font-weight:700;cursor:pointer;font-family:var(--body)}
+.term-foot button:hover{background:var(--lime);color:var(--green-dark)}
+.sw{display:flex;align-items:center;gap:10px;font-size:.84rem;font-family:var(--body);cursor:pointer}
+.sw input{width:42px;height:22px;appearance:none;background:#33503a;border-radius:999px;position:relative;cursor:pointer;transition:.2s}
+.sw input::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s}
+.sw input:checked{background:var(--amber)}
+.sw input:checked::after{left:23px}
+
+/* marquee */
+.marquee{margin:34px 0 10px;overflow:hidden;border-block:2px solid var(--ink);background:var(--green);transform:rotate(-1deg)}
+.track{display:flex;gap:40px;width:max-content;padding:14px 0;animation:scroll 28s linear infinite;font-family:var(--head);font-weight:700;color:#fff;font-size:1.15rem;white-space:nowrap}
+.track span::after{content:"\2726";margin-left:40px;color:var(--lime)}
+@keyframes scroll{to{transform:translateX(-50%)}}
+
+/* sections */
+section{padding:74px 0 10px}
+.sec-head{max-width:700px;margin-bottom:34px}
+.kicker{font-family:var(--mono);font-size:.82rem;color:var(--green-deep);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.sec-head h2{font-size:clamp(1.8rem,3.6vw,2.8rem);margin:8px 0 12px}
+.sec-head p{color:var(--muted);font-size:1.05rem}
+
+/* feature cards */
+.progress{display:flex;align-items:center;gap:14px;margin-bottom:22px;font-weight:600;flex-wrap:wrap}
+.bar{flex:1;min-width:180px;height:14px;background:#DCEFD2;border-radius:99px;overflow:hidden;border:2px solid var(--ink)}
+.bar i{display:block;height:100%;width:0;background:repeating-linear-gradient(45deg,var(--green),var(--green) 10px,var(--lime) 10px,var(--lime) 20px);transition:width .5s}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.card{background:var(--card);border-radius:var(--radius);padding:22px;border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);display:flex;flex-direction:column;gap:10px;transition:transform .2s,box-shadow .2s,background .2s;position:relative}
+.card:hover{transform:translate(-3px,-3px) rotate(-.4deg);box-shadow:8px 8px 0 var(--ink)}
+.card .ico{width:50px;height:50px;border-radius:14px;background:var(--mint);display:grid;place-items:center;font-size:1.6rem;border:2px solid var(--ink)}
+.card h3{font-size:1.2rem}
+.card p{color:var(--muted);font-size:.95rem;flex:1}
+.card code{font-family:var(--mono);font-size:.78rem;background:var(--mint);padding:3px 7px;border-radius:7px;color:var(--green-deep);word-break:break-all}
+.learn{border:2px solid var(--ink);background:#fff;border-radius:12px;padding:9px 12px;font-weight:700;cursor:pointer;font-family:var(--body);transition:.2s}
+.learn:hover{background:var(--mint)}
+.card.done{background:var(--mint)}
+.card.done .learn{background:var(--green);color:#fff}
+.card.done::after{content:"PASS";position:absolute;top:14px;right:14px;font-family:var(--mono);font-weight:700;font-size:.72rem;background:var(--green);color:#fff;padding:3px 8px;border-radius:7px;transform:rotate(6deg)}
+.win{display:none;margin-top:20px;padding:16px 20px;background:var(--green);color:#fff;border-radius:16px;border:2px solid var(--ink);font-weight:700;box-shadow:5px 5px 0 var(--ink)}
+.win.show{display:block;animation:slide .5s}
+
+/* labs */
+.lab{background:var(--card);border:2px solid var(--ink);border-radius:28px;box-shadow:8px 8px 0 var(--ink);padding:30px}
+.lab-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:30px;align-items:start}
+.lab h3{font-size:1.5rem;margin-bottom:8px}
+.lab p.sub{color:var(--muted);margin-bottom:18px}
+input[type=range]{width:100%;accent-color:var(--green)}
+.rng{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.85rem;color:var(--muted)}
+.lane{margin:16px 0;padding:14px;border-radius:16px;background:var(--paper);border:2px solid var(--ink)}
+.lane h4{font-family:var(--head);font-size:1rem;margin-bottom:8px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.lane .tr{position:relative;height:18px;background:#DCEFD2;border-radius:99px;overflow:visible}
+.lane .fill{position:absolute;left:0;top:0;height:100%;width:0;background:var(--green);border-radius:99px}
+.lane .ready{position:absolute;top:-5px;width:4px;height:28px;background:var(--ink);border-radius:2px}
+.lane .ready::after{content:"page ready";position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:.65rem;font-family:var(--mono);white-space:nowrap}
+.res{margin-top:12px;font-weight:600;min-height:24px;font-size:.95rem}
+.res.pass{color:var(--green-deep)}
+.res.fail{color:var(--red)}
+
+/* mock page */
+.mock{border:2px solid var(--ink);border-radius:18px;overflow:hidden;background:#fff}
+.mock-top{background:var(--ink);color:#fff;padding:9px 14px;font-family:var(--mono);font-size:.76rem;display:flex;gap:8px;align-items:center}
+.mock-body{padding:22px;display:flex;flex-direction:column;gap:12px;transition:.4s}
+.mock.redesign .mock-body{background:linear-gradient(135deg,#FFF3D6,#FFE3F0);flex-direction:column-reverse;gap:20px}
+.mock .el{padding:11px 14px;border:2px dashed #9DB7A0;border-radius:12px;background:#fff;text-align:left;font-family:var(--body);font-size:.95rem;cursor:pointer;transition:.2s;color:var(--ink)}
+.mock .el:hover{border-color:var(--green);background:var(--mint)}
+.mock .el.sel{border:2px solid var(--green);box-shadow:0 0 0 4px rgba(67,176,42,.25);background:var(--mint)}
+.mock .el.btnish{background:var(--green);color:#fff;font-weight:700;text-align:center}
+.mock.redesign .el{border-radius:99px}
+.loc{display:grid;gap:10px;margin-top:6px}
+.loc-item{border:2px solid var(--ink);border-radius:14px;padding:11px 14px;background:#fff;transition:.3s}
+.loc-item .top{display:flex;justify-content:space-between;gap:8px;font-weight:600;font-size:.86rem;flex-wrap:wrap}
+.loc-item code{display:block;font-family:var(--mono);font-size:.78rem;margin:6px 0;word-break:break-all;color:var(--green-deep)}
+.meter{height:8px;border-radius:99px;background:#E6EFE2;overflow:hidden}
+.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--amber),var(--green))}
+.loc-item.broken{background:#FFF0F0;border-color:var(--red)}
+.loc-item.broken code{text-decoration:line-through;color:var(--red)}
+.loc-item.broken .top::after{content:"BROKEN";color:#fff;background:var(--red);padding:1px 8px;border-radius:6px;font-size:.7rem}
+.loc-item.ok2 .top::after{content:"SURVIVED";color:#fff;background:var(--green);padding:1px 8px;border-radius:6px;font-size:.7rem}
+.empty{padding:26px;text-align:center;color:var(--muted);border:2px dashed #9DB7A0;border-radius:14px}
+
+/* roadmap */
+.road{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:s}
+.step{background:#fff;border:2px solid var(--ink);border-radius:20px;padding:20px 20px 20px 74px;position:relative;cursor:pointer;box-shadow:5px 5px 0 var(--ink);transition:.2s;text-align:left;font-family:var(--body);color:var(--ink);font-size:1rem}
+.step::before{counter-increment:s;content:counter(s);position:absolute;left:18px;top:18px;width:42px;height:42px;border-radius:50%;background:var(--lime);border:2px solid var(--ink);display:grid;place-items:center;font-family:var(--head);font-weight:700}
+.step b{display:block;font-family:var(--head);font-size:1.1rem;margin-bottom:4px}
+.step span{color:var(--muted);font-size:.92rem}
+.step:hover{transform:translateY(-4px)}
+.step.done{background:var(--mint)}
+.step.done::before{content:"\2713";background:var(--green);color:#fff}
+
+/* links */
+.cols{display:grid;grid-template-columns:1fr 1.25fr;gap:26px}
+.stack{display:grid;gap:14px}
+.lnk{display:flex;gap:14px;align-items:center;text-decoration:none;background:#fff;border:2px solid var(--ink);border-radius:18px;padding:16px 18px;box-shadow:4px 4px 0 var(--ink);transition:.18s}
+.lnk:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--green-deep);background:var(--mint)}
+.lnk .tag{flex:none;font-family:var(--mono);font-size:.7rem;font-weight:700;background:var(--green);color:#fff;border-radius:8px;padding:5px 8px}
+.lnk .tag.b{background:var(--ink)}
+.lnk strong{display:block;font-family:var(--head);font-size:1.02rem;line-height:1.25}
+.lnk small{color:var(--muted)}
+.lnk .go{margin-left:auto;font-size:1.3rem;transition:transform .2s}
+.lnk:hover .go{transform:translateX(5px)}
+.col-title{font-family:var(--head);font-size:1.4rem;margin-bottom:14px}
+.feature-link{background:var(--green);color:#fff}
+.feature-link small{color:#E7FFD9}
+.feature-link strong{color:#fff}
+.feature-link:hover{background:var(--green-deep)}
+
+/* footer */
+footer{margin-top:90px;background:var(--green-dark);color:#DDF5CF;position:relative}
+footer::before{content:"";position:absolute;left:0;right:0;top:-24px;height:24px;background:var(--green-dark);clip-path:polygon(0 100%,4% 0,8% 100%,12% 0,16% 100%,20% 0,24% 100%,28% 0,32% 100%,36% 0,40% 100%,44% 0,48% 100%,52% 0,56% 100%,60% 0,64% 100%,68% 0,72% 100%,76% 0,80% 100%,84% 0,88% 100%,92% 0,96% 100%,100% 0,100% 100%)}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px;padding:54px 0 30px}
+.foot h4{font-family:var(--head);color:#fff;margin-bottom:12px}
+.foot a{display:block;color:#BFE8A9;text-decoration:none;padding:3px 0}
+.foot a:hover{color:#fff;text-decoration:underline}
+.foot p{max-width:44ch;font-size:.95rem}
+.copy{border-top:1px solid rgba(255,255,255,.16);padding:18px 0;text-align:center;font-size:.86rem;color:#A9D893}
+
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
+.reveal.in{opacity:1;transform:none}
+
+@media (max-width:1020px){
+  .hero{grid-template-columns:1fr}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .lab-grid,.cols{grid-template-columns:1fr}
+  .road{grid-template-columns:1fr 1fr}
+  .foot{grid-template-columns:1fr 1fr}
+}
+@media (max-width:720px){
+  .burger{display:block}
+  .menu{position:absolute;top:72px;left:0;right:0;background:var(--paper);flex-direction:column;align-items:stretch;padding:14px 4%;border-bottom:2px solid var(--ink);display:none}
+  .menu.open{display:flex}
+  .grid,.road,.foot{grid-template-columns:1fr}
+  .hero{padding-top:44px}
+  .lab{padding:20px}
+  .term-body{min-height:290px;font-size:.78rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="Selenium Test Lab home"><span class="logo">Se</span>Selenium Test Lab</a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+    <ul class="menu" id="menu">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#waitlab">Wait Lab</a></li>
+      <li><a href="#locatorlab">Locator Lab</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#links">Learn More</a></li>
+      <li><a class="cta" href="https://www.justacademy.co/course-detail/hyderabad/selenium-training-in-hyderabad" target="_blank" rel="noopener">Selenium Course</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <span class="chip"><i></i> Built for Hyderabad testers</span>
+      <h1>Selenium WebDriver features that make <em>automation testing</em> easier</h1>
+      <p class="lead">Stop clicking the same checkout button every release. This little lab lets you run a test suite, break it with bad waits, fix it with good ones and pick locators that survive a redesign. Learn by poking things.</p>
+      <div class="btns">
+        <button class="btn primary" id="heroRun" type="button">&#9654; Run the demo suite</button>
+        <a class="btn" href="https://www.justacademy.co/blog-detail/selenium-webdriver-features-that-make-automation-testing-easier" target="_blank" rel="noopener">Read the full guide &rarr;</a>
+      </div>
+      <div class="stats">
+        <div><b>8</b><span>core features</span></div>
+        <div><b>2</b><span>hands on labs</span></div>
+        <div><b>6</b><span>step roadmap</span></div>
+      </div>
+    </div>
+
+    <div class="term reveal" aria-live="polite">
+      <div class="term-bar"><i class="dot r"></i><i class="dot y"></i><i class="dot g"></i><span>selenium_suite.run</span></div>
+      <div class="term-body" id="termBody"></div>
+      <div class="term-foot">
+        <label class="sw"><input type="checkbox" id="flaky"> Flaky mode (bad timing)</label>
+        <button type="button" id="termRun">Run again</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="track" id="track"></div>
+  </div>
+
+  <section id="features">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="kicker">Level 1 / Core features</span>
+        <h2>Eight features that do the heavy lifting</h2>
+        <p>Read each card, then press the button when it makes sense. Turn all eight green and your suite passes.</p>
+      </div>
+      <div class="progress reveal"><span id="learnTxt">0 of 8 learned</span><div class="bar"><i id="learnBar"></i></div></div>
+      <div class="grid" id="featureGrid"></div>
+      <div class="win" id="win">Suite green! You now know the core Selenium WebDriver features. Time to try the labs below.</div>
+    </div>
+  </section>
+
+  <section id="waitlab">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="kicker">Level 2 / Wait Lab</span>
+        <h2>Why fixed sleeps make flaky tests</h2>
+        <p>Drag the slider to decide how slow the page is. Then race a fixed sleep against an explicit wait.</p>
+      </div>
+      <div class="lab reveal">
+        <div class="lab-grid">
+          <div>
+            <h3>You control the page speed</h3>
+            <p class="sub">Real pages load at different speeds on different days. Your script has to cope.</p>
+            <label for="loadRange" class="sr">Page load seconds</label>
+            <input type="range" id="loadRange" min="1" max="9" value="5">
+            <div class="rng"><span>fast</span><b id="loadVal">page loads in 5s</b><span>slow</span></div>
+            <div class="btns"><button class="btn primary" id="raceBtn" type="button">&#9889; Race them</button></div>
+          </div>
+          <div>
+            <div class="lane"><h4><span>Fixed sleep of 3 seconds</span><span>time.sleep(3)</span></h4><div class="tr"><div class="fill" id="f1"></div><div class="ready" id="r1"></div></div><div class="res" id="res1"></div></div>
+            <div class="lane"><h4><span>Explicit wait up to 10 seconds</span><span>WebDriverWait</span></h4><div class="tr"><div class="fill" id="f2"></div><div class="ready" id="r2"></div></div><div class="res" id="res2"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="locatorlab">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="kicker">Level 3 / Locator Lab</span>
+        <h2>Pick locators that survive a redesign</h2>
+        <p>Click any element on the mock login page to see how you could find it. Then hit Redesign and watch the weak locators snap.</p>
+      </div>
+      <div class="lab reveal">
+        <div class="lab-grid">
+          <div>
+            <div class="mock" id="mock">
+              <div class="mock-top"><i class="dot r"></i><i class="dot y"></i><i class="dot g"></i>&nbsp;shop.example/login</div>
+              <div class="mock-body">
+                <button type="button" class="el" data-k="email">Email address field</button>
+                <button type="button" class="el" data-k="pass">Password field</button>
+                <button type="button" class="el btnish" data-k="btn">Log in</button>
+                <button type="button" class="el" data-k="link">Forgot password?</button>
+              </div>
+            </div>
+            <div class="btns"><button class="btn" id="redesignBtn" type="button">&#127912; Redesign the page</button></div>
+          </div>
+          <div id="locOut"><div class="empty">Click an element on the left to see its locators.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="roadmap">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="kicker">Level 4 / Roadmap</span>
+        <h2>Your six step path from beginner to job ready</h2>
+        <p>Tap a step when you finish it. No pressure, just momentum.</p>
+      </div>
+      <div class="progress reveal"><span id="roadTxt">0 of 6 steps done</span><div class="bar"><i id="roadBar"></i></div></div>
+      <div class="road" id="roadGrid"></div>
+    </div>
+  </section>
+
+  <section id="links">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="kicker">Final level / Keep going</span>
+        <h2>Courses and guides to take you further</h2>
+        <p>Learn with live, instructor led and mentor led sessions in Hyderabad, and read deeper guides whenever you like.</p>
+      </div>
+      <div class="cols">
+        <div class="reveal">
+          <h3 class="col-title">Hyderabad courses</h3>
+          <div class="stack">
+            <a class="lnk feature-link" href="https://www.justacademy.co/course-detail/hyderabad/selenium-training-in-hyderabad" target="_blank" rel="noopener"><span class="tag" style="background:#fff;color:var(--green-deep)">COURSE</span><span><strong>Selenium Training in Hyderabad</strong><small>Automation testing with live mentor support</small></span><span class="go">&rarr;</span></a>
+            <a class="lnk" href="https://www.justacademy.co/course-detail/hyderabad/javascript-training-in-hyderabad" target="_blank" rel="noopener"><span class="tag">COURSE</span><span><strong>JavaScript Training in Hyderabad</strong><small>Understand the browser behind your tests</small></span><span class="go">&rarr;</span></a>
+            <a class="lnk" href="https://www.justacademy.co/course-detail/hyderabad/python-training-in-hyderabad" target="_blank" rel="noopener"><span class="tag">COURSE</span><span><strong>Python Training in Hyderabad</strong><small>A friendly language for Selenium scripts</small></span><span class="go">&rarr;</span></a>
+          </div>
+        </div>
+        <div class="reveal">
+          <h3 class="col-title">Guides worth reading</h3>
+          <div class="stack">
+            <a class="lnk" href="https://www.justacademy.co/blog-detail/selenium-webdriver-features-that-make-automation-testing-easier" target="_blank" rel="noopener"><span class="tag b">BLOG</span><span><strong>Selenium WebDriver Features That Make Automation Testing Easier</strong><small>The full guide behind this page</small></span><span class="go">&rarr;</span></a>
+            <a class="lnk" href="https://www.justacademy.co/blog-detail/selenium-webdriver-interview-questions-for-automation-testers" target="_blank" rel="noopener"><span class="tag b">BLOG</span><span><strong>Selenium WebDriver Interview Questions for Automation Testers</strong><small>Practise answers before the interview</small></span><span class="go">&rarr;</span></a>
+            <a class="lnk" href="https://www.justacademy.co/blog-detail/selenium-automation-testing-framework-complete-beginner-guide" target="_blank" rel="noopener"><span class="tag b">BLOG</span><span><strong>Selenium Automation Testing Framework: Complete Beginner Guide</strong><small>From loose scripts to a real framework</small></span><span class="go">&rarr;</span></a>
+            <a class="lnk" href="https://www.justacademy.co/blog-detail/selenium-automation-testing-roadmap-2026-skills-required-for-qa-jobs" target="_blank" rel="noopener"><span class="tag b">BLOG</span><span><strong>Selenium Automation Testing Roadmap 2026: Skills Required for QA Jobs</strong><small>What employers expect this year</small></span><span class="go">&rarr;</span></a>
+            <a class="lnk" href="https://www.justacademy.co/blog-detail/developer-vs-tester-career-comparison-which-it-role-should-you-choose" target="_blank" rel="noopener"><span class="tag b">BLOG</span><span><strong>Developer vs Tester Career Comparison: Which IT Role Should You Choose?</strong><small>Find the path that fits you</small></span><span class="go">&rarr;</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <a class="brand" href="#top" style="color:#fff"><span class="logo" style="box-shadow:none">Se</span>Selenium Test Lab</a>
+      <p style="margin-top:14px">A playful way to learn Selenium WebDriver features that make automation testing easier. Made with plain HTML, CSS and a little JavaScript.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <a href="#features">Core features</a>
+      <a href="#waitlab">Wait Lab</a>
+      <a href="#locatorlab">Locator Lab</a>
+      <a href="#roadmap">Roadmap</a>
+    </div>
+    <div>
+      <h4>Learn more</h4>
+      <a href="https://www.justacademy.co/course-detail/hyderabad/selenium-training-in-hyderabad" target="_blank" rel="noopener">Selenium training in Hyderabad</a>
+      <a href="https://www.justacademy.co/course-detail/hyderabad/javascript-training-in-hyderabad" target="_blank" rel="noopener">JavaScript training in Hyderabad</a>
+      <a href="https://www.justacademy.co/course-detail/hyderabad/python-training-in-hyderabad" target="_blank" rel="noopener">Python training in Hyderabad</a>
+      <a href="https://www.justacademy.co/blog-detail/selenium-webdriver-features-that-make-automation-testing-easier" target="_blank" rel="noopener">Read the blog</a>
+    </div>
+  </div>
+  <div class="copy">Selenium Test Lab &bull; Content and links by JustAcademy &bull; Not affiliated with the Selenium project</div>
+</footer>
+
+<script>
+(function(){
+  var $=function(s,r){return (r||document).querySelector(s)};
+  var store={get:function(k){try{return JSON.parse(localStorage.getItem(k)||"[]")}catch(e){return []}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+  /* mobile menu */
+  var burger=$("#burger"),menu=$("#menu");
+  burger.addEventListener("click",function(){var o=menu.classList.toggle("open");burger.setAttribute("aria-expanded",o)});
+  menu.addEventListener("click",function(e){if(e.target.tagName==="A")menu.classList.remove("open")});
+
+  /* marquee */
+  var words=["Chrome","Firefox","Edge","Safari","Java","Python","JavaScript","Locators","Waits","Page Object Model","Selenium Grid","Appium","API checks","Data driven tests","CI pipelines","Headless mode"];
+  var tr=$("#track");tr.innerHTML=words.concat(words).map(function(w){return "<span>"+w+"</span>"}).join("");
+
+  /* terminal */
+  var tests=[
+    ["opens_chrome_browser","0.8s"],
+    ["finds_email_by_stable_id","0.2s"],
+    ["types_into_login_form","0.4s"],
+    ["handles_iframe_payment","0.9s"],
+    ["clicks_checkout_button","0.5s"],
+    ["accepts_browser_alert","0.3s"],
+    ["reads_order_confirmation","0.4s"],
+    ["saves_failure_screenshot","0.2s"]
+  ];
+  var body=$("#termBody"),running=false,timers=[];
+  function clearTimers(){timers.forEach(clearTimeout);timers=[]}
+  function runSuite(){
+    clearTimers();running=true;body.innerHTML="";
+    var flaky=$("#flaky").checked,passed=0,failed=0,t=0;
+    var first=document.createElement("div");first.className="sum";first.textContent="$ selenium run --browser chrome --headless";body.appendChild(first);
+    tests.forEach(function(x,i){
+      timers.push(setTimeout(function(){
+        var l=document.createElement("div");l.className="line";
+        var bad=flaky&&i===4;
+        l.innerHTML="<span>"+x[0]+"</span><span class='"+(bad?"bad":"ok")+"'>"+(bad?"FAIL":"PASS")+" "+x[1]+"</span>";
+        body.appendChild(l);
+        if(bad){failed++;var h=document.createElement("div");h.className="hint";h.textContent="TimeoutException: element not clickable yet. Fix: wait for the button to become clickable instead of sleeping. Flip the switch off to apply it.";body.appendChild(h)}else passed++;
+        if(i===tests.length-1){var s=document.createElement("div");s.className="sum";s.textContent=passed+" passed, "+failed+" failed. "+(failed?"Red build. Fix the wait.":"All green. Ship it.");body.appendChild(s);running=false}
+      },450*(i+1)));
+    });
+  }
+  $("#termRun").addEventListener("click",runSuite);
+  $("#heroRun").addEventListener("click",function(){runSuite();$(".term").scrollIntoView({behavior:"smooth",block:"center"})});
+  $("#flaky").addEventListener("change",runSuite);
+  runSuite();
+
+  /* features */
+  var feats=[
+    ["&#127760;","Cross browser support","One test, many browsers. Chrome, Firefox, Edge and Safari all speak the same WebDriver standard.","driver = webdriver.Chrome()"],
+    ["&#128205;","Smart locators","Find elements by id, name, CSS or XPath. Choose addresses that survive redesigns.","By.CSS_SELECTOR"],
+    ["&#9203;","Waits that wait","Implicit, explicit and fluent waits make scripts patient and tests trustworthy.","WebDriverWait(driver, 10)"],
+    ["&#129529;","Frames, windows, alerts","Switch context into iframes, new tabs and pop ups like a pro.","switch_to.frame()"],
+    ["&#128483;","Many languages","Java, Python, JavaScript, C Sharp and more. Same ideas, your choice of syntax.","Selenium with Java or Python"],
+    ["&#129521;","Page Object Model","One class per page. Fix a changed button in one place, not forty.","LoginPage.login(user)"],
+    ["&#128202;","Data driven testing","Run one script against many rows of data from Excel, CSV or JSON.","@DataProvider / parametrize"],
+    ["&#128241;","APIs and mobile","Pair UI checks with API tests and extend to Android and iOS using Appium.","Appium + API automation"]
+  ];
+  var learned=store.get("stl_learned");
+  var grid=$("#featureGrid");
+  grid.innerHTML=feats.map(function(f,i){
+    return "<article class='card reveal' data-i='"+i+"'><div class='ico'>"+f[0]+"</div><h3>"+f[1]+"</h3><p>"+f[2]+"</p><code>"+f[3]+"</code><button class='learn' type='button'>I get it</button></article>";
+  }).join("");
+  function paintLearn(){
+    var n=0;
+    grid.querySelectorAll(".card").forEach(function(c){var on=learned.indexOf(+c.dataset.i)>-1;c.classList.toggle("done",on);c.querySelector(".learn").textContent=on?"Learned":"I get it";if(on)n++});
+    $("#learnTxt").textContent=n+" of 8 learned";$("#learnBar").style.width=(n/8*100)+"%";
+    $("#win").classList.toggle("show",n===8);
+  }
+  grid.addEventListener("click",function(e){
+    var b=e.target.closest(".learn");if(!b)return;
+    var i=+b.closest(".card").dataset.i,k=learned.indexOf(i);
+    if(k>-1)learned.splice(k,1);else learned.push(i);
+    store.set("stl_learned",learned);paintLearn();
+  });
+  paintLearn();
+
+  /* wait lab */
+  var range=$("#loadRange"),val=$("#loadVal");
+  range.addEventListener("input",function(){val.textContent="page loads in "+range.value+"s"});
+  function place(id,sec){$(id).style.left=(sec/10*100)+"%"}
+  function lane(fill,resEl,secs,okTxt,badTxt,ok){
+    var f=$(fill),r=$(resEl);
+    f.style.transition="none";f.style.width="0";r.textContent="";r.className="res";
+    void f.offsetWidth;
+    f.style.transition="width "+(secs*0.32)+"s linear";f.style.width=(secs/10*100)+"%";
+    setTimeout(function(){r.textContent=ok?okTxt:badTxt;r.className="res "+(ok?"pass":"fail")},secs*320+80);
+  }
+  $("#raceBtn").addEventListener("click",function(){
+    var n=+range.value;place("#r1",n);place("#r2",n);
+    lane("#f1","#res1",3,"Passed, but it wasted time waiting for nothing.","FAILED: clicked at 3s but the page was not ready until "+n+"s.",n<=3);
+    lane("#f2","#res2",n,"Passed at "+n+"s. It waited exactly as long as needed.","",true);
+  });
+  place("#r1",5);place("#r2",5);
+
+  /* locator lab */
+  var L={
+    email:["Email address field",[["ID","#email",92,true],["CSS data attribute","[data-test=\"login-email\"]",96,true],["CSS class","input.form-input.first",45,false],["Absolute XPath","/html/body/div[2]/form/input[1]",8,false]]],
+    pass:["Password field",[["ID","#password",92,true],["CSS data attribute","[data-test=\"login-password\"]",96,true],["Name","input[name=\"pwd\"]",70,true],["Absolute XPath","/html/body/div[2]/form/input[2]",8,false]]],
+    btn:["Log in button",[["ID","#loginBtn",90,true],["CSS data attribute","[data-test=\"login-submit\"]",96,true],["Text XPath","//button[text()=\"Log in\"]",60,false],["CSS class","button.btn.btn-primary",40,false]]],
+    link:["Forgot password link",[["Link text","Forgot password?",65,false],["CSS data attribute","a[data-test=\"forgot-link\"]",94,true],["ID","#forgot",85,true],["Absolute XPath","/html/body/div[2]/a",6,false]]]
+  };
+  var cur=null,redesigned=false,mock=$("#mock"),out=$("#locOut");
+  function draw(){
+    if(!cur){out.innerHTML="<div class='empty'>Click an element on the left to see its locators.</div>";return}
+    var d=L[cur];
+    out.innerHTML="<h3 style='margin-bottom:10px'>"+d[0]+"</h3><div class='loc'>"+d[1].map(function(x){
+      var cls=redesigned?(x[3]?"ok2":"broken"):"";
+      return "<div class='loc-item "+cls+"'><div class='top'><span>"+x[0]+"</span><span>stability "+x[2]+"%</span></div><code>"+x[1].replace(/</g,"&lt;")+"</code><div class='meter'><i style='width:"+x[2]+"%'></i></div></div>";
+    }).join("")+"</div>";
+  }
+  mock.addEventListener("click",function(e){
+    var b=e.target.closest(".el");if(!b)return;
+    mock.querySelectorAll(".el").forEach(function(x){x.classList.remove("sel")});
+    b.classList.add("sel");cur=b.dataset.k;draw();
+  });
+  $("#redesignBtn").addEventListener("click",function(){
+    redesigned=!redesigned;mock.classList.toggle("redesign",redesigned);
+    this.innerHTML=redesigned?"&#8617; Undo redesign":"&#127912; Redesign the page";draw();
+  });
+
+  /* roadmap */
+  var steps=[
+    ["Testing basics","Test cases, bug life cycle and regression thinking."],
+    ["Pick one language","Java or Python first. Practise a little every day."],
+    ["Selenium basics","Locators, waits, frames, alerts and your first script."],
+    ["Build a framework","Page Object Model, data driven checks and reports."],
+    ["Add API and CI","Test an API, then run suites automatically on every change."],
+    ["Mobile and interviews","Try Appium, build a portfolio and rehearse questions."]
+  ];
+  var done=store.get("stl_road"),rg=$("#roadGrid");
+  rg.innerHTML=steps.map(function(s,i){return "<button type='button' class='step reveal' data-i='"+i+"'><b>"+s[0]+"</b><span>"+s[1]+"</span></button>"}).join("");
+  function paintRoad(){
+    var n=0;rg.querySelectorAll(".step").forEach(function(c){var on=done.indexOf(+c.dataset.i)>-1;c.classList.toggle("done",on);if(on)n++});
+    $("#roadTxt").textContent=n+" of 6 steps done";$("#roadBar").style.width=(n/6*100)+"%";
+  }
+  rg.addEventListener("click",function(e){
+    var b=e.target.closest(".step");if(!b)return;
+    var i=+b.dataset.i,k=done.indexOf(i);if(k>-1)done.splice(k,1);else done.push(i);
+    store.set("stl_road",done);paintRoad();
+  });
+  paintRoad();
+
+  /* reveal on scroll */
+  var items=document.querySelectorAll(".reveal");
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target)}})},{threshold:.12});
+    items.forEach(function(x){io.observe(x)});
+  }else items.forEach(function(x){x.classList.add("in")});
+})();
+</script>
+</body>
+</html>
